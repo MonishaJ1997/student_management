@@ -27,7 +27,7 @@ SECRET_KEY = env('SECRET_KEY', default='django-insecure-nd)gw=sc=%-w2a8wxg0)&rs0
 DEBUG = env.bool('DEBUG', default=True)
 
 # --- Allowed Hosts ---
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost', 'student-management-4-q9lt.onrender.com'])
+ALLOWED_HOSTS =  ['student-management-4-q9lt.onrender.com']
 
 # --- Installed Apps ---
 INSTALLED_APPS = [
