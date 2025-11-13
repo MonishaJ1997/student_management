@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Student Detail{% endblock %}
+{% block content %}
+<h2>Student: {{ student.user.get_full_name }}</h2>
+<p><strong>Roll:</strong> {{ student.roll_number }} | <strong>DOB:</strong> {{ student.dob }}</p>
+
+<h4>Enrollments</h4>
+<ul>
+    {% for enrollment in enrollments %}
+    <li>{{ enrollment.batch.name }} ({{ enrollment.batch.course.name }})</li>
+    {% empty %}<li>No enrollment found</li>{% endfor %}
+</ul>
+
+<h4>Marks</h4>
+<ul>
+    {% for m in marks %}
+    <li>{{ m.exam.name }}: {{ m.marks_obtained }}</li>
+    {% empty %}<li>No marks recorded</li>{% endfor %}
+</ul>
+
+<h4>Recent Attendance</h4>
+<ul>
+    {% for a in attendance_records %}
+    <li>{{ a.date }}: {{ a.present|yesno:"Present,Absent" }}</li>
+    {% empty %}<li>No attendance records</li>{% endfor %}
+</ul>
+{% endblock %}
