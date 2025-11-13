@@ -84,7 +84,7 @@ DATABASES = {
         'NAME': env('DB_NAME', default='school_db'),
         'USER': env('DB_USER', default='root'),
         'PASSWORD': env('DB_PASSWORD', default='1234m'),
-        'HOST': env('DB_HOST', default='127.0.0.1'),
+        'HOST': env('DB_HOST'),
         'PORT': env('DB_PORT', default='3306'),
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
