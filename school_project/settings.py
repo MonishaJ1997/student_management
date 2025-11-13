@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+
 from pathlib import Path
 import os
 import environ
@@ -23,10 +24,10 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # --- Security ---
 SECRET_KEY = env('SECRET_KEY', default='django-insecure-nd)gw=sc=%-w2a8wxg0)&rs0f!u7_^wn^a40@(w%eoe((-&r^h')
+DEBUG = env.bool('DEBUG', default=True)
 
-# Debug and Allowed Hosts
-DEBUG = env.bool('DEBUG', default=False)
-ALLOWED_HOSTS = ["*"]
+# --- Allowed Hosts ---
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost', 'student-management-4-5k3a.onrender.com'])
 
 # --- Installed Apps ---
 INSTALLED_APPS = [
@@ -39,32 +40,39 @@ INSTALLED_APPS = [
     'core',             # your main app
     'crispy_forms',     # optional, for better forms
 ]
+
+# --- Middleware ---
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',          # ✅ Must be first
+    'whitenoise.middleware.WhiteNoiseMiddleware',       # ✅ Serve static files in production
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',       # ✅ Must be after sessions
-    'django.contrib.messages.middleware.MessageMiddleware',          # ✅ Required for admin
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  
 ]
+
+# --- Templates ---
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',  # ✅ Must be exactly this
-        'DIRS': [BASE_DIR / 'templates'],  # Optional: your custom templates folder
-        'APP_DIRS': True,                   # ✅ Enables templates inside app directories
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'templates'],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',  # ✅ Required by admin
+                'django.template.context_processors.request',  # Required by admin
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                
             ],
         },
     },
 ]
+
+# --- WSGI ---
+ROOT_URLCONF = 'school_project.urls'
+WSGI_APPLICATION = 'school_project.wsgi.application'
 
 # --- Database (MySQL) ---
 DATABASES = {
@@ -80,16 +88,12 @@ DATABASES = {
         },
     }
 }
-# settings.py
-
-ROOT_URLCONF = 'school_project.urls'
 
 # --- Authentication ---
 AUTH_USER_MODEL = 'core.User'
-# settings.py
-LOGIN_URL = '/login/'           # URL for login page
-LOGIN_REDIRECT_URL = '/'        # Redirect after login
-LOGOUT_REDIRECT_URL = '/login/' # Redirect after logout
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'
 
 # --- Localization ---
 TIME_ZONE = 'Asia/Kolkata'
@@ -97,6 +101,12 @@ USE_TZ = True
 
 # --- Static & Media ---
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [BASE_DIR / 'static']           # local static folder
+STATIC_ROOT = BASE_DIR / 'staticfiles'            # production static folder
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # WhiteNoise
+
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# --- Security Headers (optional for Render HTTPS) ---
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
