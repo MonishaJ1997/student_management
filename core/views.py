@@ -12,12 +12,17 @@ def is_teacher(user):
 def is_parent(user):
     return user.is_authenticated and getattr(user, 'role', None) == 'parent'
 
+
+from django.http import HttpResponse
+
 @login_required
 def dashboard(request):
-    # simple dashboard, show counts
-    students = Student.objects.count()
-    exams = Exam.objects.count()
-    return render(request, 'core/dashboard.html', {'students': students, 'exams': exams})
+    try:
+        students = Student.objects.count()
+        exams = Exam.objects.count()
+        return render(request, 'core/dashboard.html', {'students': students, 'exams': exams})
+    except Exception as e:
+        return HttpResponse(f"Dashboard error: {e}", content_type="text/plain")
 
 @login_required
 def students_list(request):
