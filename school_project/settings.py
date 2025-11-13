@@ -24,9 +24,10 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # --- Security ---
 SECRET_KEY = env('SECRET_KEY', default='django-insecure-nd)gw=sc=%-w2a8wxg0)&rs0f!u7_^wn^a40@(w%eoe((-&r^h')
-DEBUG = env.bool('DEBUG', default=True)
+DEBUG = env.bool('DEBUG', default=FALSE)
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+ALLOWED_HOSTS = ['student-management-4-q9lt.onrender.com']
+
 
 # --- Allowed Hosts ---
 
